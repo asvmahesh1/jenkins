@@ -1,0 +1,30 @@
+---
+driver:
+  name: ec2
+  aws_ssh_key_id: chef
+  region: ap-south-1
+  instance_type: t2.micro
+  image_id: ami-233b494c
+  security_group_ids: ["sg-6cdcf804"]
+  retryable_tries: 120
+
+provisioner:
+  name: chef_solo
+  
+verifier:
+  name: inspec
+
+platforms:
+  - name: windows-2012r2
+  - name: centos-7.2
+
+transport:
+  ssh_key: C:/Users/Administrator/Downloads/chef.pem
+suites:
+  - name: default
+    run_list:
+      - recipe[ntpasv::default]
+    verifier:
+      inspec_tests:
+        - test/smoke/default
+    attributes:
